@@ -6,6 +6,7 @@ import SectionHeading from "./section-heading";
 import { useSectionInView } from "@/lib/hooks";
 import { sendEmail } from "@/actions/sendEmail";
 import SubmitBtn from "./submit-btn";
+import { error } from "console";
 
 export default function Contact() {
   const { ref } = useSectionInView("Contact", 0.5);
@@ -34,8 +35,9 @@ export default function Contact() {
           console.log("running on client");
           console.log(formData.get("senderEmail"));
           console.log(formData.get("senderMessage"));
-          const { data, error } = await sendEmail(formData);
-          if (error) {
+          const result = await sendEmail(formData);
+          if ("error" in result) {
+            const error = result.error;
             toast.error(error);
             return;
           }
